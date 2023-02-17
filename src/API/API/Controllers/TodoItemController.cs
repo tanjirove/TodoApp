@@ -1,6 +1,4 @@
-﻿using CleanArchitecture.Todo.Controllers;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Todo.Application.Models;
 using Todo.Application.TodoItems.Commands.CreateTodoItem;
 using Todo.Application.TodoItems.Commands.DeleteTodoItem;
@@ -12,12 +10,6 @@ namespace Todo.API.Controllers
     [Route("todo-item")]
     public class TodoItemsController : ApiControllerBase
     {
-        [HttpPost("index")]
-        public ActionResult Index()
-        {
-            return Content("Index");
-        }
-
         [HttpPost("create")]
         public async Task<ActionResult<CommandResult>> Create(CreateTodoItemCommand command)
         {
@@ -30,15 +22,25 @@ namespace Todo.API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpPost("delete")]
-        public async Task<CommandResult> Delete(DeleteTodoItemCommand command)
+        [HttpPost("delete/{id}")]
+        public async Task<CommandResult> Delete(Guid id)
         {
+            var command = new DeleteTodoItemCommand
+            {
+                Id = id
+            };
+
             return await Mediator.Send(command);
         }
 
-        [HttpGet("get")]
-        public async Task<GetTodoItemResult> Get(GetTodoItemQuery query)
+        [HttpGet("get/{id}")]
+        public async Task<GetTodoItemResult> Get(Guid id)
         {
+            var query = new GetTodoItemQuery
+            {
+                Id = id
+            };
+
             return await Mediator.Send(query);
         }
     }
