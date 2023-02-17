@@ -8,7 +8,7 @@ using Todo.Application.TodoItems.Queries.GetTodoItem;
 namespace Todo.API.Controllers
 {
     [Route("todo-item")]
-    public class TodoItemsController : ApiControllerBase
+    public class TodoItemController : ApiControllerBase
     {
         [HttpPost("create")]
         public async Task<ActionResult<CommandResult>> Create(CreateTodoItemCommand command)
@@ -16,13 +16,13 @@ namespace Todo.API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpPost("update")]
+        [HttpPut("update")]
         public async Task<CommandResult> Update(UpdateTodoItemCommand command)
         {
             return await Mediator.Send(command);
         }
 
-        [HttpPost("delete/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<CommandResult> Delete(Guid id)
         {
             var command = new DeleteTodoItemCommand
