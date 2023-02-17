@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,8 @@ namespace Todo.Application.TodoItems.Commands.DeleteTodoItem
         {
             try
             {
-                var todo = await _context.TodoItems.FindAsync(request.Id);
+                var todo = await _context.TodoItems
+                    .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
                 if (todo == null)
                 {

@@ -10,3 +10,7 @@ tests/
 src/API/obj/
 src/API/API/obj/
 src/API/API/bin/
+.vs/ProjectEvaluation/todo.metadata.v2
+.vs/
+src/Web/bin/
+src/Web/obj/

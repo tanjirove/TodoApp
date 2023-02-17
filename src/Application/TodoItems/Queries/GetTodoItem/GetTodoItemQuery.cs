@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -8,6 +9,7 @@ using Todo.Application.Common.Contracts;
 using Todo.Application.Models;
 using Todo.Application.TodoItems.Queries.GetTodoItem;
 using Todo.Domain.Entities;
+using Todo.Domain.Utilities;
 
 namespace Todo.Application.TodoItems.Queries.GetTodoItem
 {
@@ -51,7 +53,8 @@ public class GetTodoItemsWithPaginationQueryHandler : IRequestHandler<GetTodoIte
         try
         {
             var todo = await _context.TodoItems
-                .FindAsync(request.Id, cancellationToken);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (todo == null)
             {
@@ -62,6 +65,8 @@ public class GetTodoItemsWithPaginationQueryHandler : IRequestHandler<GetTodoIte
                     Errors = new Dictionary<string, string[]> { { "", new[] { issue } } }
                 };
             }
+
+            todo.Note = Encryption.Decrypt(todo.Note);
 
             var result = new GetTodoItemResult
             {

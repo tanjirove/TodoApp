@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Todo.Application.Models
@@ -29,6 +30,7 @@ namespace Todo.Application.Models
 
         public bool Success { get; set; } = false;
         public string SuccessMessage { get; set; }
+        public Guid Id { get; set; }
         public IDictionary<string, string[]> Errors { get; set; }
 
         public static CommandResult Succeed()
@@ -39,6 +41,11 @@ namespace Todo.Application.Models
         public static CommandResult Succeed(string successMessage)
         {
             return new CommandResult { Success = true, SuccessMessage = successMessage };
+        }
+
+        public static CommandResult Succeed(string successMessage, Guid id)
+        {
+            return new CommandResult { Success = true, SuccessMessage = successMessage, Id = id };
         }
 
         public static CommandResult Failed(IDictionary<string, string[]> errors)

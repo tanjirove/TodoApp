@@ -11,7 +11,8 @@ namespace Todo.Infrastructure.Persistence
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
-        public ApplicationDbContext() : base()
+        public ApplicationDbContext(
+            DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 

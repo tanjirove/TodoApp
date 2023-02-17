@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Todo.Application.Common.Contracts;
 using Todo.Application.Models;
 using Todo.Domain.Entities;
+using Todo.Domain.Utilities;
 
 namespace Todo.Application.TodoItems.Commands.CreateTodoItem
 {
@@ -26,22 +27,20 @@ namespace Todo.Application.TodoItems.Commands.CreateTodoItem
 
         public async Task<CommandResult> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
         {
-            //TODO: Title Duplicate Validation
-
-            var entity = new TodoItem
+            var todo = new TodoItem
             {
                 Title = request.Title,
-                Note = request.Note, //TODO: Encryption
+                Note = Encryption.Encrypt(request.Note), 
                 Done = false
             };
 
             try
             {
-                _context.TodoItems.Add(entity);
+                _context.TodoItems.Add(todo);
 
                 await _context.SaveChangesAsync(cancellationToken);
 
-                return CommandResult.Succeed("Todo has been created successfully");
+                return CommandResult.Succeed("Todo has been created successfully", todo.Id);
             }
             catch (Exception ex)
             {

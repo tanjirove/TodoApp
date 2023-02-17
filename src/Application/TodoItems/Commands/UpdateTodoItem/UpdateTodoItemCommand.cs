@@ -1,10 +1,11 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Todo.Application.Common.Contracts;
 using Todo.Application.Models;
-using Todo.Application.TodoItems.Commands.DeleteTodoItem;
+using Todo.Domain.Utilities;
 
 namespace Todo.Application.TodoItems.Commands.UpdateTodoItem
 {
@@ -29,7 +30,8 @@ namespace Todo.Application.TodoItems.Commands.UpdateTodoItem
         {
             try
             {
-                var todo = await _context.TodoItems.FindAsync(request.Id);
+                var todo = await _context.TodoItems
+                    .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
                 if (todo == null)
                 {
@@ -37,12 +39,13 @@ namespace Todo.Application.TodoItems.Commands.UpdateTodoItem
                 }
 
                 todo.Title = request.Title;
-                todo.Note = request.Title;
+                todo.Note = Encryption.Encrypt(request.Note);
                 todo.Done = request.Done;
+                todo.UpdatedAt = DateTime.Now;
 
                 await _context.SaveChangesAsync(cancellationToken);
 
-                return CommandResult.Failed("Todo was not found");
+                return CommandResult.Failed("Todo has been updated");
             }
             catch (Exception ex)
             {

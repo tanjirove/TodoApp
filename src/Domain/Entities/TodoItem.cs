@@ -16,5 +16,6 @@ namespace Todo.Domain.Entities
         public string Note { get; set; }
         public bool Done { get; set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }
