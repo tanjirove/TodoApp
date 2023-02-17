@@ -14,3 +14,7 @@ src/API/API/bin/
 .vs/
 src/Web/bin/
 src/Web/obj/
+Application.Tests/bin/
+Application.Tests/obj/Application.Tests.csproj.nuget.dgspec.json
+Application.Tests/obj/Debug/net6.0/.NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+Application.Tests/obj/
